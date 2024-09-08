@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
+import { POST_PER_PAGE } from "../../app/config";
 
 const initialState = {
   isLoading: false,
   error: null,
-  posts: [],
+  postsById: {},
+  currentPagePosts: [],
 };
 
 const slice = createSlice({
@@ -22,12 +24,21 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
       const newPost = action.payload;
-      state.posts.unshift(newPost);
+      if (state.currentPagePosts.length % POST_PER_PAGE === 0)
+        state.currentPagePosts.pop();
+      state.postsById[newPost._id] = newPost;
+      state.currentPagePosts.unshift(newPost._id);
     },
     getPostSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
-      state.posts = action.payload.posts;
+      const { count, posts } = action.payload;
+      posts.forEach((post) => {
+        state.postsById[post._id] = post;
+        if (!state.currentPagePosts.includes(post._id))
+          state.currentPagePosts.push(post._id);
+      });
+      state.totalPosts = count;
     },
   },
 });
@@ -48,7 +59,7 @@ export const createPost =
   };
 
 export const getPosts =
-  ({ userId, page, limit = 2 }) =>
+  ({ userId, page, limit = POST_PER_PAGE }) =>
   async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
