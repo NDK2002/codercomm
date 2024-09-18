@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import React from "react";
 import useAuth from "../../hooks/useAuth";
 import PostForm from "../post/PostForm";
