@@ -16,8 +16,6 @@ function CommentForm({ postId }) {
     setContent("");
   };
 
-  const handleClick = () => {};
-
   return (
     <form onSubmit={handleSubmit}>
       <Stack direction="row" alignItems="center">
