@@ -62,8 +62,8 @@ function CommentList({ postId }) {
             onChange={(e, page) => dispatch(getComments({ postId, page }))}
           />
         )}
-        {renderComments}
       </Stack>
+      {renderComments}
     </Stack>
   );
 }
