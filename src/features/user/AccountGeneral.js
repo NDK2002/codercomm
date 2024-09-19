@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import { Box, Card, Grid, Stack } from "@mui/material";
+import { Box, Card, Grid, Stack, Typography } from "@mui/material";
 import React, { useCallback } from "react";
 import useAuth from "../../hooks/useAuth";
 
@@ -7,7 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
-import { FormProvider, FTextField } from "../../components/form";
+import { FormProvider, FTextField, FUploadAvatar } from "../../components/form";
+import { fData } from "../../utils/numberFormat";
 import { updateUserProfile } from "./userSlice";
 
 const UpdateUserSchema = yup.object().shape({
@@ -23,7 +24,7 @@ function AccountGeneral() {
     email: user?.email || "",
     jobTitle: user?.jobTitle || "",
     company: user?.company || "",
-    // avatarUrl: user?.avatarUrl || "",
+    avatarUrl: user?.avatarUrl || "",
     coverUrl: user?.coverUrl || "",
     phoneNumber: user?.phoneNumber || "",
     address: user?.address || "",
@@ -69,7 +70,7 @@ function AccountGeneral() {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3, textAlign: "center" }}>
-            {/* <FUploadAvatar
+            <FUploadAvatar
               name="avatarUrl"
               accept="image/*"
               maxSize={3145728}
@@ -89,7 +90,7 @@ function AccountGeneral() {
                   <br /> max size of {fData(3145728)}
                 </Typography>
               }
-            /> */}
+            />
           </Card>
         </Grid>
 

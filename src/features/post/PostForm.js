@@ -1,11 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { alpha, Box, Card, Stack } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { FormProvider, FTextField } from "../../components/form";
+import { FormProvider, FTextField, FUploadImage } from "../../components/form";
 import { createPost } from "./postSlice";
 
 const yupSchema = Yup.object().shape({
@@ -32,6 +32,22 @@ function PostForm() {
 
   const { isLoading } = useSelector((state) => state.post);
 
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+
+      if (file) {
+        setValue(
+          "image",
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        );
+      }
+    },
+    [setValue]
+  );
+
   const onSubmit = (data) => {
     dispatch(createPost(data)).then(() => reset());
   };
@@ -53,7 +69,13 @@ function PostForm() {
               },
             }}
           />
-          <FTextField name="image" placeholder="Image" />
+
+          <FUploadImage
+            name="image"
+            accept="image/*"
+            maxSize={3145728}
+            onDrop={handleDrop}
+          />
 
           <Box
             sx={{
