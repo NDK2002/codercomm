@@ -15,15 +15,19 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import useAuth from "../../hooks/useAuth";
 import { fDate } from "../../utils/formatTime";
 import CommentForm from "../comment/CommentForm";
 import CommentList from "../comment/CommentList";
+import PostEdit from "./PostEdit";
 import PostReaction from "./PostReaction";
 import { deletePost } from "./postSlice";
 
 function PostCard({ post }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [openPostEdit, setOpenPostEdit] = useState(false);
+  const { user } = useAuth();
   const dispatch = useDispatch();
 
   const handleClick = (event) => {
@@ -39,6 +43,15 @@ function PostCard({ post }) {
 
   const handleCloseDelConfirm = () => {
     setOpenConfirmModal(false);
+  };
+
+  const handleOpenPostEdit = () => {
+    setOpenPostEdit(true);
+    setAnchorEl(null);
+  };
+
+  const handleClosePostEdit = () => {
+    setOpenPostEdit(false);
   };
 
   const postOptionsMenu = (
@@ -57,7 +70,14 @@ function PostCard({ post }) {
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
-      <MenuItem sx={{ mx: 1 }}>Edit Post</MenuItem>
+      <MenuItem sx={{ mx: 1 }} onClick={handleOpenPostEdit}>
+        Edit Post
+      </MenuItem>
+      <PostEdit
+        post={post}
+        openPostEdit={openPostEdit}
+        handleClosePostEdit={handleClosePostEdit}
+      />
       <MenuItem onClick={handleOpenConfirmModal} sx={{ mx: 1 }}>
         Delete Post
       </MenuItem>
@@ -104,7 +124,7 @@ function PostCard({ post }) {
           </>
         }
       />
-      {postOptionsMenu}
+      {user._id === post.author._id && postOptionsMenu}
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Typography>{post.content}</Typography>

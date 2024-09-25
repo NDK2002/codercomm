@@ -139,24 +139,22 @@ export const deletePost = (postId) => async (dispatch) => {
   }
 };
 
-export const editPost =
-  ({ postId, data }) =>
-  async (dispatch) => {
-    try {
-      const content = data.content;
-      const imageUrl = await cloudinaryUpload(data.image);
-      const image = imageUrl;
-      dispatch(slice.actions.startLoading());
-      const response = await apiService.put(`/posts/${postId}`, {
-        content,
-        image,
-      });
-      dispatch(slice.actions.editPostSuccess({ ...response.data, postId }));
-      toast.success("Update post successfully");
-    } catch (error) {
-      dispatch(slice.actions.hasError(error.message));
-      toast.error(error.message);
-    }
-  };
+export const editPost = (postId, data) => async (dispatch) => {
+  try {
+    const content = data.content;
+    const imageUrl = await cloudinaryUpload(data.image);
+    const image = imageUrl;
+    dispatch(slice.actions.startLoading());
+    const response = await apiService.put(`/posts/${postId}`, {
+      content,
+      image,
+    });
+    dispatch(slice.actions.editPostSuccess({ ...response.data, postId }));
+    toast.success("Update post successfully");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    toast.error(error.message);
+  }
+};
 
 export default slice.reducer;
