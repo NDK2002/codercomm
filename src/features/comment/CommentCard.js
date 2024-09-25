@@ -1,9 +1,69 @@
-import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
-import React from "react";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {
+  Avatar,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import ConfirmationModal from "../../components/ConfirmationModal";
 import { fDate } from "../../utils/formatTime";
 import CommentReaction from "./CommentReaction";
+import { deleteComment } from "./commentSlice";
 
 function CommentCard({ comment }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenConfirmModal = () => {
+    setOpenConfirmModal(true);
+  };
+
+  const handleCloseDelConfirm = () => {
+    setOpenConfirmModal(false);
+  };
+
+  const commentOptionsMenu = (
+    <Menu
+      id="menu-appbar"
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+    >
+      <MenuItem onClick={handleOpenConfirmModal} sx={{ mx: 1 }}>
+        Delete
+      </MenuItem>
+      <ConfirmationModal
+        title="comment"
+        openConfirmModal={openConfirmModal}
+        handleCloseConfirmModal={handleCloseDelConfirm}
+        deleteAction={() => dispatch(deleteComment(comment._id))}
+      />
+    </Menu>
+  );
+
   return (
     <Stack direction="row" spacing={2}>
       <Avatar alt={comment.author?.name} src={comment.author?.avatarUrl} />
@@ -28,6 +88,11 @@ function CommentCard({ comment }) {
           </Box>
         </Stack>
       </Paper>
+
+      <IconButton aria-haspopup="true" onClick={handleClick}>
+        <MoreVertIcon sx={{ fontSize: 30 }} />
+      </IconButton>
+      {commentOptionsMenu}
     </Stack>
   );
 }
