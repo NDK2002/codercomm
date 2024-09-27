@@ -2,12 +2,14 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
+import SendIcon from "@mui/icons-material/Send";
 import { Box, Card, Container, styled, Tab, Tabs } from "@mui/material";
 import { capitalCase } from "change-case";
 import React, { useState } from "react";
 import AddFriend from "../features/friend/AddFriend";
 import FriendList from "../features/friend/FriendList";
 import FriendRequests from "../features/friend/FriendRequests";
+import OutGoingList from "../features/friend/OutGoingList";
 import Profile from "../features/user/Profile";
 import ProfileCover from "../features/user/ProfileCover";
 import useAuth from "../hooks/useAuth";
@@ -51,6 +53,11 @@ function HomePage() {
       value: "requests",
       icon: <ContactMailIcon sx={{ fontSize: 24 }} />,
       component: <FriendRequests />,
+    },
+    {
+      value: "outgoing",
+      icon: <SendIcon sx={{ fontSize: 24 }} />,
+      component: <OutGoingList />,
     },
     {
       value: "add_friend",
